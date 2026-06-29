@@ -127,56 +127,58 @@ function App () {
   }
 
   return (
-    <Form form={form} layout='vertical'>
-      <Flex>
-        <Button type='primary' onClick={showModal}>Adicionar</Button>
-        <Modal
-          title="Adicionar Pessoa"
-          closable={{ 'aria-label': 'Custom Close Button' }}
-          open={isOpenModal}
-          onOk={handleOk}
-          onCancel={handleCancel}
-        >
-          <Form.Item name='nome' label='Nome:' rules={[{ required: true, message: 'Digite seu nome' }]}>
-            <Input type='text' placeholder='Digite seu nome...' />
-          </Form.Item>
-          <Form.Item name='cpf' label='CPF:' rules={[{ required: true, message: 'Digite seu CPF' }]}>
-            <Input
-              type='text'
-              onChange={(e) => handleCPF(e.target.value)}
-              placeholder='Digite seu CPF...'
-            />
-          </Form.Item>
-          <Form.Item name='rg' label='RG:' rules={[{ required: true, message: 'Digite seu RG' }]}>
-            <Input
-              type='text'
-              onChange={(e) => handleRG(e.target.value)}
-              placeholder='Digite seu RG...'
-            />
-          </Form.Item>
-          <Form.Item name='data_nasc' label='Data de Nascimento:' rules={[{ required: true, message: 'Digite sua data de nascimento' }]}>
-            <Input
-              type='text'
-              onChange={(e) => handleDT(e.target.value)}
-              placeholder='Digite sua data de...'
-            />
-          </Form.Item>
-          <Form.Item name="sexo" label='Sexo:' rules={[{ required: true, message: 'Seleciona um Sexo' }]}>
-            <Select>
-              <Select.Option value="M">Masculino</Select.Option>
-              <Select.Option value="F">Feminino</Select.Option>
-            </Select>
-          </Form.Item>
-        </Modal>
+    <div className='container'>
+      <Form className='form' form={form} layout='vertical'>
+        <Flex className='header-actions'>
+          <Button type='primary' onClick={showModal}>Adicionar</Button>
+          <Modal
+            title="Adicionar Pessoa"
+            closable={{ 'aria-label': 'Custom Close Button' }}
+            open={isOpenModal}
+            onOk={handleOk}
+            onCancel={handleCancel}
+          >
+            <Form.Item name='nome' label='Nome:' rules={[{ required: true, message: 'Digite seu nome' }]}>
+              <Input type='text' placeholder='Digite seu nome...' />
+            </Form.Item>
+            <Form.Item name='cpf' label='CPF:' rules={[{ required: true, message: 'Digite seu CPF' }]}>
+              <Input
+                type='text'
+                onChange={(e) => handleCPF(e.target.value)}
+                placeholder='Digite seu CPF...'
+              />
+            </Form.Item>
+            <Form.Item name='rg' label='RG:' rules={[{ required: true, message: 'Digite seu RG' }]}>
+              <Input
+                type='text'
+                onChange={(e) => handleRG(e.target.value)}
+                placeholder='Digite seu RG...'
+              />
+            </Form.Item>
+            <Form.Item name='data_nasc' label='Data de Nascimento:' rules={[{ required: true, message: 'Digite sua data de nascimento' }]}>
+              <Input
+                type='text'
+                onChange={(e) => handleDT(e.target.value)}
+                placeholder='Digite sua data de...'
+              />
+            </Form.Item>
+            <Form.Item name="sexo" label='Sexo:' rules={[{ required: true, message: 'Seleciona um Sexo' }]}>
+              <Select>
+                <Select.Option value="M">Masculino</Select.Option>
+                <Select.Option value="F">Feminino</Select.Option>
+              </Select>
+            </Form.Item>
+          </Modal>
 
-        <Input type='text' placeholder='Pesquisar...' value={search} onChange={(e) => setSearch(e.target.value)} />
-      </Flex>
-      <Table
-        rowKey="id"
-        columns={columns({ handleRemove, handleEdit }) as []}
-        dataSource={filteredRows}
-      />
-    </Form >
+          <Input type='text' placeholder='Pesquisar...' value={search} onChange={(e) => setSearch(e.target.value)} />
+        </Flex>
+        <Table
+          rowKey="id"
+          columns={columns({ handleRemove, handleEdit }) as []}
+          dataSource={filteredRows}
+        />
+      </Form>
+    </div>
   )
 }
 

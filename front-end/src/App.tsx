@@ -4,23 +4,32 @@ import { columns } from './columns'
 import './App.css'
 
 import { validateSearch } from "../utils/validateSearch"
+import { formatCPF } from "../utils/formatCPF"
+import { formatRG } from "../utils/formatRG"
+import { formatDT } from "../utils/formatDT"
+
 import type { Data } from './interfaces'
+
+const API_URL = 'http://localhost:3000/pessoas'
 
 function App () {
   const [isOpenModal, setIsOpenModal] = useState(false)
+  const [edit, setEdit] = useState<Data | null>(null)
   const [search, setSearch] = useState('')
   const [data, setData] = useState<Data[]>([])
   const [form] = Form.useForm()
 
-  useEffect(() => {
-    fetch("http://localhost:3000/db")
-      .then(response => response.json())
-      .then((data) => {
-        setData(data.pessoas)
-      })
-      .catch(err => console.log(err))
-  }, [])
+  const carregarPessoas = async () => {
+    const response = await fetch(API_URL)
+    const pessoas = await response.json()
 
+    setData(pessoas)
+  }
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    carregarPessoas()
+  }, [])
 
   const showModal = () => {
     setIsOpenModal(true)
@@ -29,35 +38,89 @@ function App () {
 
   const handleOk = async () => {
     const values = await form.validateFields()
-    let sex: string;
 
-    if (values.sexo === 'M') sex = 'Masculino'
-    if (values.sexo === 'F') sex = 'Feminino'
+    const pessoa = {
+      ...values,
+      sexo: values.sexo === 'M' ? 'Masculino' : 'Feminino'
+    }
 
-    setData((prev) => {
-      return [
-        ...prev,
-        {
-          id: Math.max(...prev.map(item => item.id), 0) + 1,
-          nome: values.nome,
-          cpf: values.cpf,
-          rg: values.rg,
-          data_nasc: values.data_nasc,
-          sexo: sex
-        }
-      ]
+    if (edit) {
+      await fetch(`${API_URL}/${edit.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(pessoa)
+      })
+
+      await carregarPessoas()
+
+      setEdit(null)
+      form.resetFields()
+      setIsOpenModal(false)
+
+      return
+    }
+
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(pessoa)
     })
+
+    const pessoaCriada = await response.json()
+
+    setData(prev => [...prev, pessoaCriada])
+
+    form.resetFields()
     setIsOpenModal(false)
   }
 
-  const filteredRows = validateSearch(search, data)
 
-  const handleRemove = (record: Data) => {
-    console.log("🚀 ~ handleRemove ~ record:", record)
-    if (!record) return
+  const handleRemove = async (record: Data) => {
+    await fetch(`${API_URL}/${record.id}`, {
+      method: 'DELETE'
+    })
 
     setData(data.filter(item => item.id !== record.id))
   }
+
+  const handleEdit = async (record: Data) => {
+    setEdit(record)
+
+    form.setFieldsValue({
+      nome: record.nome,
+      cpf: record.cpf,
+      rg: record.rg,
+      data_nasc: record.data_nasc,
+      sexo: record.sexo === 'Masculino' ? 'M' : 'F'
+    })
+
+    setIsOpenModal(true)
+  }
+
+
+  const handleCPF = (value: string) => {
+    form.setFieldsValue({
+      cpf: formatCPF(value)
+    })
+  }
+
+  const handleRG = (value: string) => {
+    form.setFieldsValue({
+      rg: formatRG(value)
+    })
+  }
+
+  const handleDT = (value: string) => {
+    form.setFieldsValue({
+      data_nasc: formatDT(value)
+    })
+  }
+
+  const filteredRows = validateSearch(search, data)
 
   const handleCancel = () => {
     setIsOpenModal(false)
@@ -74,19 +137,31 @@ function App () {
           onOk={handleOk}
           onCancel={handleCancel}
         >
-          <Form.Item name='nome' label='Nome:'>
+          <Form.Item name='nome' label='Nome:' rules={[{ required: true, message: 'Digite seu nome' }]}>
             <Input type='text' placeholder='Digite seu nome...' />
           </Form.Item>
-          <Form.Item name='cpf' label='CPF:'>
-            <Input type='text' placeholder='Digite seu CPF...' />
+          <Form.Item name='cpf' label='CPF:' rules={[{ required: true, message: 'Digite seu CPF' }]}>
+            <Input
+              type='text'
+              onChange={(e) => handleCPF(e.target.value)}
+              placeholder='Digite seu CPF...'
+            />
           </Form.Item>
-          <Form.Item name='rg' label='RG:'>
-            <Input type='text' placeholder='Digite seu RG...' />
+          <Form.Item name='rg' label='RG:' rules={[{ required: true, message: 'Digite seu RG' }]}>
+            <Input
+              type='text'
+              onChange={(e) => handleRG(e.target.value)}
+              placeholder='Digite seu RG...'
+            />
           </Form.Item>
-          <Form.Item name='data_nasc' label='Data de Nascimento:'>
-            <Input type='text' placeholder='Digite sua data de...' />
+          <Form.Item name='data_nasc' label='Data de Nascimento:' rules={[{ required: true, message: 'Digite sua data de nascimento' }]}>
+            <Input
+              type='text'
+              onChange={(e) => handleDT(e.target.value)}
+              placeholder='Digite sua data de...'
+            />
           </Form.Item>
-          <Form.Item name="sexo" label='Sexo:'>
+          <Form.Item name="sexo" label='Sexo:' rules={[{ required: true, message: 'Seleciona um Sexo' }]}>
             <Select>
               <Select.Option value="M">Masculino</Select.Option>
               <Select.Option value="F">Feminino</Select.Option>
@@ -96,7 +171,11 @@ function App () {
 
         <Input type='text' placeholder='Pesquisar...' value={search} onChange={(e) => setSearch(e.target.value)} />
       </Flex>
-      <Table columns={columns({ handleRemove }) as []} dataSource={filteredRows} />
+      <Table
+        rowKey="id"
+        columns={columns({ handleRemove, handleEdit }) as []}
+        dataSource={filteredRows}
+      />
     </Form >
   )
 }

@@ -1,5 +1,5 @@
-import { DeleteOutlined } from "@ant-design/icons"
-import { Button } from "antd"
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons"
+import { Button, Flex } from "antd"
 import type { Data } from "./interfaces"
 
 type CollumnsType = {
@@ -11,9 +11,10 @@ type CollumnsType = {
 
 type ColumnsProps = {
     handleRemove: (record: Data) => void
+    handleEdit: (record: Data) => void
 }
 
-export const columns = ({ handleRemove }: ColumnsProps) => {
+export const columns = ({ handleRemove, handleEdit }: ColumnsProps) => {
     const baseColumns: CollumnsType[] = [
         {
             title: 'Nome',
@@ -45,12 +46,20 @@ export const columns = ({ handleRemove }: ColumnsProps) => {
             dataIndex: 'actions',
             key: 'actions',
             render: (_, record) => (
-                <Button
-                    icon={<DeleteOutlined />}
-                    type="primary"
-                    ghost
-                    onClick={() => handleRemove(record)}
-                />
+                <Flex gap={5}>
+                    <Button
+                        icon={<EditOutlined />}
+                        type="primary"
+                        ghost
+                        onClick={() => handleEdit(record)}
+                    />
+                    <Button
+                        icon={<DeleteOutlined />}
+                        type="primary"
+                        ghost
+                        onClick={() => handleRemove(record)}
+                    />
+                </Flex>
             )
         }
     ]

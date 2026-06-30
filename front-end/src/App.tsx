@@ -46,7 +46,7 @@ function App () {
 
     // Se for para Editar pessoa
     if (edit) {
-      await fetch(`${API_URL}/${edit.id}`, {
+      const response = await fetch(`${API_URL}/${edit.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -54,7 +54,14 @@ function App () {
         body: JSON.stringify(pessoa)
       })
 
-      await carregarPessoas()
+      const result = await response.json()
+
+      if (!response.ok) {
+        notification.warning({ description: result.message })
+        return
+      }
+
+      setData(prev => [...prev, result])
 
       setEdit(null)
       form.resetFields()

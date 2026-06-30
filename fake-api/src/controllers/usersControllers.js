@@ -77,6 +77,23 @@ exports.update = (req, res) => {
         })
     }
 
+    const cpfExiste = db.pessoas.some(pessoa => pessoa.cpf === req.body.cpf && pessoa.id !== id)
+    const rgExiste = db.pessoas.some(pessoa => pessoa.rg === req.body.rg && pessoa.id !== id)
+
+    if (cpfExiste) {
+        return res.status(409).json({
+            success: false,
+            message: 'CPF ja cadastrado.'
+        })
+    }
+
+    if (rgExiste) {
+        return res.status(409).json({
+            success: false,
+            message: 'RG ja cadastrado.'
+        })
+    }
+
     db.pessoas[pessoaIndex] = {
         ...db.pessoas[pessoaIndex],
         ...req.body,

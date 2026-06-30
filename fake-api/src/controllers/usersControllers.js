@@ -8,6 +8,7 @@ function readDatabase () {
 }
 
 function writeDatabase (data) {
+    // fail
     fs.writeFileSync(dbPath, JSON.stringify(data, null, 2))
 }
 
@@ -99,6 +100,7 @@ exports.update = (req, res) => {
         ...req.body,
         id
     }
+
 
     writeDatabase(db)
 

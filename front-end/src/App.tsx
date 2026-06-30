@@ -63,7 +63,7 @@ function App () {
         return
       }
 
-      setData(prev => [...prev, result])
+      carregarPessoas()
 
       setEdit(null)
       form.resetFields()

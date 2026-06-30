@@ -1,8 +1,11 @@
-export const validateCPF = (cpf: string) => {
+// export const validateCPF = (_: any, value: any) => {
+//   if (!value) {
+//     return Promise.resolve()
+//   }
 
-  const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/
-  if (cpfRegex.test(cpf)) {
-    return cpf.replace(/\D/g, '')
-  }
-  return cpf
-}
+//   if (value.length !== 11) {
+//     return Promise.reject(new Error('CPF deve ter 11 dígitos'))
+//   }
+
+//   return Promise.resolve()
+// }

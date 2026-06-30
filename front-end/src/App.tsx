@@ -3,7 +3,8 @@ import { Button, Flex, Form, Input, Modal, notification, Select, Table } from 'a
 import { columns } from './columns'
 import './App.css'
 
-import { validateSearch } from "../utils/validateSearch"
+import { filtrarPessoas } from "../utils/filtrarPessoas"
+// import { validateCPF } from "../utils/validateCPF"
 import { formatCPF } from "../utils/formatCPF"
 import { formatRG } from "../utils/formatRG"
 import { formatDT } from "../utils/formatDT"
@@ -15,7 +16,8 @@ const API_URL = 'http://localhost:3333/pessoas'
 function App () {
   const [isOpenModal, setIsOpenModal] = useState(false)
   const [edit, setEdit] = useState<Data | null>(null)
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState<string>('')
+  const [sexoFilter, setSexoFilter] = useState<string | undefined>(undefined)
   const [data, setData] = useState<Data[]>([])
   const [form] = Form.useForm()
 
@@ -134,7 +136,7 @@ function App () {
     })
   }
 
-  const filteredRows = validateSearch(search, data)
+  const filteredRows = filtrarPessoas(data, search, sexoFilter)
 
   const handleCancel = () => {
     setIsOpenModal(false)
@@ -142,7 +144,7 @@ function App () {
 
   return (
     <div className='container'>
-      <Form className='form' form={form} layout='vertical'>
+      <Form className='form' form={form} layout='vertical' initialValues={{ sexo: 'M' }}>
         <Flex className='header-actions'>
           <Button type='primary' onClick={showModal}>Adicionar</Button>
           <Modal
@@ -176,7 +178,7 @@ function App () {
                 placeholder='Digite sua data de...'
               />
             </Form.Item>
-            <Form.Item name="sexo" label='Sexo:' rules={[{ required: true, message: 'Seleciona um Sexo' }]}>
+            <Form.Item name="sexo" label='Sexo:'>
               <Select>
                 <Select.Option value="M">Masculino</Select.Option>
                 <Select.Option value="F">Feminino</Select.Option>
@@ -184,12 +186,28 @@ function App () {
             </Form.Item>
           </Modal>
 
-          <Input type='text' placeholder='Pesquisar...' value={search} onChange={(e) => setSearch(e.target.value)} />
+          <Input type='text' placeholder='Pesquise pelo NOME ou CPF / RG' value={search} onChange={(e) => setSearch(e.target.value)} />
+          <Select
+            allowClear
+            placeholder="Filtrar por sexo"
+            value={sexoFilter}
+            onChange={(value) => setSexoFilter(value)}
+            options={[
+              { label: 'Masculino', value: 'Masculino' },
+              { label: 'Feminino', value: 'Feminino' }
+            ]}
+          />
         </Flex>
         <Table
           rowKey="id"
           columns={columns({ handleRemove, handleEdit }) as []}
           dataSource={filteredRows}
+          pagination={{
+            // showTotal: (total, range) => `${range[0]}-${range[1]} de ${total} itens`,
+            showTotal: (total) => `Total de ${total} itens`,
+            showSizeChanger: false,
+            pageSize: 10,
+          }}
         />
       </Form>
     </div>

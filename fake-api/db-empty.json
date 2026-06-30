@@ -1,3 +1,84 @@
 {
-  "pessoas": []
+  "pessoas": [
+    {
+      "id": 1,
+      "nome": "Francisca Julia da Costa",
+      "cpf": "457.696.936-65",
+      "rg": "47.360.897-2",
+      "data_nasc": "23/03/1944",
+      "sexo": "Feminino"
+    },
+    {
+      "id": 2,
+      "nome": "Noah Felipe Silva",
+      "cpf": "956.531.431-70",
+      "rg": "40.974.782-8",
+      "data_nasc": "11/07/1964",
+      "sexo": "Masculino"
+    },
+    {
+      "id": 3,
+      "nome": "Alícia Rosângela Melo",
+      "cpf": "066.291.353-18",
+      "rg": "36.214.141-1",
+      "data_nasc": "18/02/1978",
+      "sexo": "Feminino"
+    },
+    {
+      "id": 4,
+      "nome": "Cristiane Renata Ana das Neves",
+      "cpf": "946.074.401-08",
+      "rg": "32.301.736-8",
+      "data_nasc": "10/05/1966",
+      "sexo": "Feminino"
+    },
+    {
+      "id": 5,
+      "nome": "Priscila Benedita Vanessa Ferreira",
+      "cpf": "888.282.394-68",
+      "rg": "44.524.670-4",
+      "data_nasc": "15/11/1966",
+      "sexo": "Feminino"
+    },
+    {
+      "id": 6,
+      "nome": "Bianca Carolina Nunes",
+      "cpf": "484.323.140-13",
+      "rg": "44.466.563-8",
+      "data_nasc": "16/03/1948",
+      "sexo": "Feminino"
+    },
+    {
+      "id": 7,
+      "nome": "Yuri Vicente Manuel Silveira",
+      "cpf": "250.111.093-56",
+      "rg": "18.597.361-9",
+      "data_nasc": "05/09/1974",
+      "sexo": "Masculino"
+    },
+    {
+      "id": 8,
+      "nome": "Melissa Alessandra Barros",
+      "cpf": "446.675.916-25",
+      "rg": "25.598.673-7",
+      "data_nasc": "13/01/2000",
+      "sexo": "Feminino"
+    },
+    {
+      "id": 9,
+      "nome": "Márcia Daniela Lara da Cruz",
+      "cpf": "932.803.826-02",
+      "rg": "40.653.176-6",
+      "data_nasc": "04/06/1986",
+      "sexo": "Feminino"
+    },
+    {
+      "id": 10,
+      "nome": "Filipe Anderson Rafael Assis",
+      "cpf": "704.869.005-41",
+      "rg": "39.383.334-3",
+      "data_nasc": "19/11/1995",
+      "sexo": "Masculino"
+    }
+  ]
 }

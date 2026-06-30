@@ -33,10 +33,28 @@ exports.findById = (req, res) => {
 
 exports.create = (req, res) => {
     const db = readDatabase()
+    const { pessoas } = db
 
     const novaPessoa = {
         id: Date.now(),
         ...req.body
+    }
+
+    const cpfExiste = pessoas.some(pessoa => pessoa.cpf === novaPessoa.cpf)
+    const rgExiste = pessoas.some(pessoa => pessoa.rg === novaPessoa.rg)
+
+    if (cpfExiste) {
+        return res.status(409).json({
+            success: false,
+            message: 'CPF ja cadastrado.'
+        })
+    }
+
+    if (rgExiste) {
+        return res.status(409).json({
+            success: false,
+            message: 'RG ja cadastrado.'
+        })
     }
 
     db.pessoas.push(novaPessoa)

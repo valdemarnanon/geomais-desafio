@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, Flex, Form, Input, Modal, Select, Table } from 'antd'
+import { Button, Flex, Form, Input, Modal, notification, Select, Table } from 'antd'
 import { columns } from './columns'
 import './App.css'
 
@@ -71,9 +71,14 @@ function App () {
       body: JSON.stringify(pessoa)
     })
 
-    const pessoaCriada = await response.json()
+    const result = await response.json()
 
-    setData(prev => [...prev, pessoaCriada])
+    if (!response.ok) {
+      notification.warning({ description: result.message })
+      return
+    }
+
+    setData(prev => [...prev, result])
 
     form.resetFields()
     setIsOpenModal(false)

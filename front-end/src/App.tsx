@@ -10,7 +10,7 @@ import { formatDT } from "../utils/formatDT"
 
 import type { Data } from './interfaces'
 
-const API_URL = 'http://localhost:3000/pessoas'
+const API_URL = 'http://localhost:3333/pessoas'
 
 function App () {
   const [isOpenModal, setIsOpenModal] = useState(false)
@@ -44,9 +44,10 @@ function App () {
       sexo: values.sexo === 'M' ? 'Masculino' : 'Feminino'
     }
 
+    // Se for para Editar pessoa
     if (edit) {
       await fetch(`${API_URL}/${edit.id}`, {
-        method: 'PATCH',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -84,7 +85,8 @@ function App () {
       method: 'DELETE'
     })
 
-    setData(data.filter(item => item.id !== record.id))
+    // setData(prev => prev.filter(item => item.id !== record.id))
+    await carregarPessoas()
   }
 
   const handleEdit = async (record: Data) => {

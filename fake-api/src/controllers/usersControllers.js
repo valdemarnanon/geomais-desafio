@@ -8,7 +8,6 @@ function readDatabase () {
 }
 
 function writeDatabase (data) {
-    // fail
     fs.writeFileSync(dbPath, JSON.stringify(data, null, 2))
 }
 
@@ -17,7 +16,6 @@ exports.findAll = (req, res) => {
 
     res.json(pessoas)
 }
-
 
 exports.findById = (req, res) => {
     const { pessoas } = readDatabase()

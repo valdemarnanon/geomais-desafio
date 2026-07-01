@@ -9,6 +9,8 @@ import { mascararCPF } from "../utils/mascararCPF"
 import { mascararRG } from "../utils/mascararRG"
 import { mascararDT } from "../utils/mascararDT"
 
+import { validarCPF } from "../utils/validarCPF"
+
 import type { Data } from './interfaces'
 
 function App () {
@@ -104,11 +106,21 @@ function App () {
             <Form.Item name='nome' label='Nome:' rules={[{ required: true, message: 'Digite seu nome' }]}>
               <Input type='text' placeholder='Digite seu nome...' />
             </Form.Item>
-            <Form.Item name='cpf' label='CPF:' rules={[{ required: true, message: 'Digite seu CPF' }]}>
+            <Form.Item
+              name='cpf'
+              label='CPF:'
+              getValueFromEvent={(e) => mascararCPF(e.target.value)}
+              validateTrigger={['onChange', 'onBlur']}
+              rules={[
+                { required: true, message: 'Digite seu CPF' },
+                { validator: validarCPF }
+              ]}
+            >
               <Input
                 type='text'
-                onChange={(e) => form.setFieldsValue({ cpf: mascararCPF(e.target.value) })}
-                placeholder='Digite seu CPF...'
+                placeholder='000.000.000-00'
+                maxLength={14}
+              // onChange={(e) => form.setFieldsValue({ cpf: mascararCPF(e.target.value) })}
               />
             </Form.Item>
             <Form.Item name='rg' label='RG:' rules={[{ required: true, message: 'Digite seu RG' }]}>

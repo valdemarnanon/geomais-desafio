@@ -4,7 +4,6 @@ import { columns } from './columns'
 import './App.css'
 
 import { filtrarPessoas } from "../utils/filtrarPessoas"
-// import { validateCPF } from "../utils/validateCPF"
 import { formatCPF } from "../utils/formatCPF"
 import { formatRG } from "../utils/formatRG"
 import { formatDT } from "../utils/formatDT"
@@ -117,25 +116,6 @@ function App () {
     setIsOpenModal(true)
   }
 
-
-  const handleCPF = (value: string) => {
-    form.setFieldsValue({
-      cpf: formatCPF(value)
-    })
-  }
-
-  const handleRG = (value: string) => {
-    form.setFieldsValue({
-      rg: formatRG(value)
-    })
-  }
-
-  const handleDT = (value: string) => {
-    form.setFieldsValue({
-      data_nasc: formatDT(value)
-    })
-  }
-
   const filteredRows = filtrarPessoas(data, search, sexoFilter)
 
   const handleCancel = () => {
@@ -160,21 +140,21 @@ function App () {
             <Form.Item name='cpf' label='CPF:' rules={[{ required: true, message: 'Digite seu CPF' }]}>
               <Input
                 type='text'
-                onChange={(e) => handleCPF(e.target.value)}
+                onChange={(e) => form.setFieldsValue({ cpf: formatCPF(e.target.value) })}
                 placeholder='Digite seu CPF...'
               />
             </Form.Item>
             <Form.Item name='rg' label='RG:' rules={[{ required: true, message: 'Digite seu RG' }]}>
               <Input
                 type='text'
-                onChange={(e) => handleRG(e.target.value)}
+                onChange={(e) => form.setFieldsValue({ rg: formatRG(e.target.value) })}
                 placeholder='Digite seu RG...'
               />
             </Form.Item>
             <Form.Item name='data_nasc' label='Data de Nascimento:' rules={[{ required: true, message: 'Digite sua data de nascimento' }]}>
               <Input
                 type='text'
-                onChange={(e) => handleDT(e.target.value)}
+                onChange={(e) => form.setFieldsValue({ data_nasc: formatDT(e.target.value) })}
                 placeholder='Digite sua data de...'
               />
             </Form.Item>
